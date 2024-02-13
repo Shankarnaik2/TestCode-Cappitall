@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Page</title>
+</head>
+<body>
+    <h1>Product Management</h1>
+    <h2>Add Product</h2>
+    <form id="addProductForm" onsubmit="addProduct(event)">
+        <input type="text" id="productName" placeholder="Product Name" required><br>
+        <input type="number" id="productPrice" placeholder="Product Price" required><br>
+        <button type="submit">Add Product</button>
+    </form>
+
+    <h2>Update Product Price</h2>
+    <form id="updateProductPriceForm" onsubmit="updateProductPrice(event)">
+        <input type="number" id="productId" placeholder="Product ID" required><br>
+        <input type="number" id="newPrice" placeholder="New Price" required><br>
+        <button type="submit">Update Price</button>
+    </form>
+
+    <h2>Delete Product</h2>
+    <form id="deleteProductForm" onsubmit="deleteProduct(event)">
+        <input type="number" id="deleteProductId" placeholder="Product ID" required><br>
+        <button type="submit">Delete Product</button>
+    </form>
+
+    <script>
+        async function addProduct(event) {
+            event.preventDefault();
+            const name = document.getElementById('productName').value;
+            const price = document.getElementById('productPrice').value;
+            const response = await fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, price })
+            });
+            console.log(await response.text());
+        }
+
+        async function updateProductPrice(event) {
+            event.preventDefault();
+            const id = document.getElementById('productId').value;
+            const newPrice = document.getElementById('newPrice').value;
+            const response = await fetch(`/api/products/${id}?price=${newPrice}`, {
+                method: 'PUT'
+            });
+            console.log(await response.text());
+        }
+
+        async function deleteProduct(event) {
+            event.preventDefault();
+            const id = document.getElementById('deleteProductId').value;
+            const response = await fetch(`/api/products/${id}`, {
+                method: 'DELETE'
+            });
+            console.log(await response.text());
+        }
+    </script>
+</body>
+</html>
